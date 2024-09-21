@@ -1,12 +1,17 @@
 package infnet.edu.atddd.Domain.Models;
 
+import infnet.edu.atddd.Contracts.CreateProductRequest;
+import infnet.edu.atddd.Contracts.UpdateProdutoRequest;
 import infnet.edu.atddd.Domain.Enum.Type_Prod;
 import infnet.edu.atddd.Domain.Primitives.EntityRoot;
 import infnet.edu.atddd.Domain.ValueObjects.NameValueObject;
 import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
 
 @Entity
 public class Produto extends EntityRoot {
+
+    private static final Type_Prod[] myEnumValues = Type_Prod.values(); 
 
     public NameValueObject name;
     public double price;
@@ -25,4 +30,25 @@ public class Produto extends EntityRoot {
         this.price = price;
         this.type = type;
     }
+
+    public static Produto MapCreateRequestToProduto(CreateProductRequest request) throws Exception
+    {
+        if(request.type > myEnumValues.length)
+            return new Produto();
+
+        return new Produto(request.name,
+        request.price,
+        myEnumValues[request.type]);
+    }
+
+    public static Produto MapUpdateRequestToProduto(@Valid UpdateProdutoRequest request) throws Exception {
+        if(request.type > myEnumValues.length)
+            return new Produto();
+
+        return new Produto(request.id,
+        request.name,
+        request.price,
+        myEnumValues[request.type]);
+    }
+
 }
