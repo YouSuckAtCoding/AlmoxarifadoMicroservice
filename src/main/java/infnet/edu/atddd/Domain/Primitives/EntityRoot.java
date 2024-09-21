@@ -1,7 +1,5 @@
 package infnet.edu.atddd.Domain.Primitives;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
@@ -9,7 +7,6 @@ import jakarta.persistence.MappedSuperclass;
 public abstract class EntityRoot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String id;
 
     // Jpa required

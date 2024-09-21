@@ -1,5 +1,6 @@
 package infnet.edu.atddd.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import infnet.edu.atddd.Contracts.CreateProductRequest;
 import infnet.edu.atddd.Contracts.UpdateProdutoRequest;
 import infnet.edu.atddd.Domain.Models.Produto;
+import infnet.edu.atddd.Domain.Models.ProdutoDTO;
 import infnet.edu.atddd.Infrastructure.ProdutoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -31,8 +33,19 @@ public class ProdutoController {
     private ProdutoRepository _Repository;
 
     @GetMapping(GetAll)
-    public ResponseEntity<List<Produto>> GetAll() {
-        return new ResponseEntity<List<Produto>>(_Repository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Produto>> GetAll() throws Exception {
+        
+        List<Produto> result = new ArrayList<Produto>();
+        var fetched = _Repository.findAll();
+        if(fetched.size() > 0)
+        {
+            for (ProdutoDTO produto : fetched) {
+                result.add(Produto.MapDTOtoProduto(produto));
+            }
+    
+        }
+     
+        return new ResponseEntity<List<Produto>>(result, HttpStatus.OK);
     }
 
     @PostMapping(Create)
@@ -45,10 +58,10 @@ public class ProdutoController {
 
         Produto prod = Produto.MapCreateRequestToProduto(request);
        
-        Produto result;
+        ProdutoDTO result;
 
         if (prod.name.value.length() > 0) {
-            result = _Repository.save(prod);
+            result = _Repository.save(Produto.MapProdutoToProdutoDTO(prod));
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         }
 
@@ -66,10 +79,10 @@ public class ProdutoController {
 
         Produto prod = Produto.MapUpdateRequestToProduto(request);
        
-        Produto result;
+        ProdutoDTO result;
 
         if (prod.name.value.length() > 0) {
-            result = _Repository.save(prod);
+            result = _Repository.save(Produto.MapProdutoToProdutoDTO(prod));
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
 

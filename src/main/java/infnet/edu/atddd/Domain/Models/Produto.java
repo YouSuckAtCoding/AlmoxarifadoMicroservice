@@ -1,14 +1,14 @@
 package infnet.edu.atddd.Domain.Models;
 
+import java.util.UUID;
+
 import infnet.edu.atddd.Contracts.CreateProductRequest;
 import infnet.edu.atddd.Contracts.UpdateProdutoRequest;
 import infnet.edu.atddd.Domain.Enum.Type_Prod;
 import infnet.edu.atddd.Domain.Primitives.EntityRoot;
 import infnet.edu.atddd.Domain.ValueObjects.NameValueObject;
-import jakarta.persistence.Entity;
-import jakarta.validation.Valid;
 
-@Entity
+
 public class Produto extends EntityRoot {
 
     private static final Type_Prod[] myEnumValues = Type_Prod.values(); 
@@ -30,7 +30,15 @@ public class Produto extends EntityRoot {
         this.price = price;
         this.type = type;
     }
+    public static Produto MapDTOtoProduto(ProdutoDTO request) throws Exception
+    {
+        if(request.type > myEnumValues.length)
+            return new Produto();
 
+        return new Produto(request.name,
+        request.price,
+        Type_Prod.valueOf(request.type));
+    }
     public static Produto MapCreateRequestToProduto(CreateProductRequest request) throws Exception
     {
         if(request.type > myEnumValues.length)
@@ -38,17 +46,28 @@ public class Produto extends EntityRoot {
 
         return new Produto(request.name,
         request.price,
-        myEnumValues[request.type]);
+        Type_Prod.valueOf(request.type));
     }
 
-    public static Produto MapUpdateRequestToProduto(@Valid UpdateProdutoRequest request) throws Exception {
+    public static Produto MapUpdateRequestToProduto(UpdateProdutoRequest request) throws Exception {
         if(request.type > myEnumValues.length)
             return new Produto();
 
         return new Produto(request.id,
         request.name,
         request.price,
-        myEnumValues[request.type]);
+        Type_Prod.valueOf(request.type));
+    }
+
+    public static ProdutoDTO MapProdutoToProdutoDTO(Produto request) throws Exception {
+        
+        ProdutoDTO dto = new ProdutoDTO();
+        dto.id = UUID.randomUUID().toString();
+        dto.setName(request.name.value);
+        dto.setPrice(request.price);
+        dto.setType(request.type.getValue());
+
+        return dto;
     }
 
 }

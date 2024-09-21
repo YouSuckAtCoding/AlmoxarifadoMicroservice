@@ -1,0 +1,12 @@
+
+services:
+  amoxarifadodatabase:
+      container_name: 'almoxarifadodb'
+      image: 'mysql:latest'
+      environment:
+        - 'MYSQL_DATABASE=amoxarifadodatabase'
+        - 'MYSQL_PASSWORD=Numsey@Password!'
+        - 'MYSQL_ROOT_PASSWORD=Numsey@Password!!'
+        - 'MYSQL_USER=myuser'
+      ports:
+        - '3306:3306'
