@@ -6,23 +6,23 @@ import infnet.edu.atddd.Domain.Errors.NameDomainErrors;
 import infnet.edu.atddd.Domain.Primitives.ValueObject;
 import infnet.edu.atddd.Domain.Shared.Result;
 
-public class NameValueObject extends ValueObject {
+public class Quantidade extends ValueObject {
 
-    public String value;
+    public Integer value;
 
-    private NameValueObject(String value)
+    private Quantidade(Integer value)
     {
         this.value = value;
     }
 
-    public static Result<NameValueObject> Create(String value) throws Exception
+    public static Result<Quantidade> Create(Integer value) throws Exception
     {
-        if(value.length() == 0)
+        if(value == 0)
         {
-            return Result.<NameValueObject>Failure(NameDomainErrors.Empty());
+            return Result.<Quantidade>Failure(NameDomainErrors.Empty());
         }
         
-        return Result.<NameValueObject>Success(new NameValueObject(value)); 
+        return Result.<Quantidade>Success(new Quantidade(value)); 
     }
 
 
